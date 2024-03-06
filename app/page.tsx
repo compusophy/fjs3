@@ -30,21 +30,32 @@ const reducer: FrameReducer<State> = (state, action) => {
 };
 
 async function handleFollowRequest(fid: string) {
+  const API_KEY = process.env.NEXT_PUBLIC_API_KEY;
+  const SIGNER_UUID = process.env.NEXT_PUBLIC_SIGNER_UUID;
+  
+  // Ensure both API_KEY and SIGNER_UUID are defined before proceeding
+  if (typeof API_KEY === 'undefined' || typeof SIGNER_UUID === 'undefined') {
+    console.error("API_KEY or SIGNER_UUID is undefined.");
+    return;
+  }
+  
   try {
-    const API_KEY = process.env.NEXT_PUBLIC_API_KEY;
-    const SIGNER_UUID = process.env.NEXT_PUBLIC_SIGNER_UUID;
-    
     const response = await fetch("https://api.neynar.com/v2/farcaster/user/follow", {
       method: "POST",
-      headers: {
+      headers: new Headers({
         "Content-Type": "application/json",
-        api_key: API_KEY, // Replace this with your actual API key
-      },
+        "api_key": API_KEY,
+      }),
       body: JSON.stringify({
-        signer_uuid: SIGNER_UUID, // Replace this with your actual signer UUID
-        target_fids: [fid], // Assuming fid is a string
+        signer_uuid: SIGNER_UUID,
+        target_fids: [fid],
       }),
     });
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
     const data = await response.json();
     console.log(data);
   } catch (error) {
