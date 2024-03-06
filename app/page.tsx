@@ -72,7 +72,7 @@ export default async function Home({ searchParams }: NextServerPageProps) {
   // example: load the users credentials & check they have an NFT
   // Handling follow request based on user's action
   if (previousFrame.postBody?.untrustedData.buttonIndex) {
-    await handleFollowRequest(String(frameMessage.requesterFid));
+    await handleFollowRequest(String(frameMessage!.requesterFid));
   }
 
   console.log("info: state is:", state);
