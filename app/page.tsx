@@ -31,14 +31,17 @@ const reducer: FrameReducer<State> = (state, action) => {
 
 async function handleFollowRequest(fid: string) {
   try {
+    const API_KEY = process.env.NEXT_PUBLIC_API_KEY;
+    const SIGNER_UUID = process.env.NEXT_PUBLIC_SIGNER_UUID;
+    
     const response = await fetch("https://api.neynar.com/v2/farcaster/user/follow", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        api_key: "96DF8866-B2A8-4C2F-8D93-9487246B1BB7", // Replace this with your actual API key
+        api_key: API_KEY, // Replace this with your actual API key
       },
       body: JSON.stringify({
-        signer_uuid: "130f560f-c9c7-41ab-ba06-da8d1223f5ce", // Replace this with your actual signer UUID
+        signer_uuid: SIGNER_UUID, // Replace this with your actual signer UUID
         target_fids: [fid], // Assuming fid is a string
       }),
     });
